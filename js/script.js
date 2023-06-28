@@ -9,7 +9,6 @@ Ragionamento base milestone 2
     - sostituire le parti dinamiche con delle variabili 
     - inserire la variabile (che contiene l'html) nell'contenitore che lo conderrà
                 //-------------------------------/
-
 - MILESTONE 3 :
   - Se clicchiamo sul tasto "Mi Piace" cambiamo il colore al testo del bottone e incrementiamo il counter dei likes relativo.
   - Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
@@ -19,9 +18,19 @@ Ragionamento base milestone 3
     - dato il button ha un data-postid="id" possiamo verificare il valore di questo attributo castom e prenderlo come indice dell'arrei (questo ritornerà l'oggetto intero )
 2. prendere il valore dei like dell'oggetto e incrementarlo  
 3. dopo di che inserisco nell'elemento specifico il nuovo valore 
+                //-------------------------------/
+- BONUS 
+  - 1. Formattare le date in formato italiano (gg/mm/aaaa)
+  - 2. Gestire l'assenza dell'immagine profilo con un elemento di fallback che contiene le iniziali dell'utente (es. Luca Formicola > LF).
+  - 3. Al click su un pulsante "Mi Piace" di un post, se abbiamo già cliccato dobbiamo decrementare il contatore e cambiare il colore del bottone.
 
+ragionamento base bonus
+- 1 nell'creare l'html  creiamo una funzione che prende la data corrende e la slitta restituendola con ordine differente (quindi da 2021-06-25 a 25-06-2021)
 */
 
+/*-------------
+Data
+--------------*/
 const posts = [
     {
         "id": 1,
@@ -87,17 +96,15 @@ const postsContainer = document.getElementById('container');
 functions
 -----------*/
 const createHTML = (currentObject) => {
-    const fullNameSplitted = currentObject.author.name.split(' ')
-    const currentName = fullNameSplitted[0]
-    const currentLastname = fullNameSplitted[1]
-    const authorInitials = currentName[0] + currentLastname[0]
+    const authorInitials = formatCurrentName(currentObject)
+    const createdFormated = formatDate(currentObject.created)
     const elementHtml =  `
         <div class="post">
             <div class="post__header">
                 <div class="post-meta">                    
                     <div class="post-meta__icon">
                         ${
-                            currentObject.author.image != undefined ? `
+                            currentObject.author.image != null ? `
                             <img class="profile-pic" 
                             src="${currentObject.author.image}"
                             alt="${currentObject.author.name}"
@@ -112,7 +119,7 @@ const createHTML = (currentObject) => {
                         ${currentObject.author.name}
                         </div>
                         <div class="post-meta__time">
-                        ${currentObject.created}
+                        ${createdFormated}
                         </div>
                     </div>                    
                 </div>
@@ -141,13 +148,27 @@ const createHTML = (currentObject) => {
     return elementHtml;
 };
 
+const formatCurrentName = (currentObject) => {
+    const fullNameSplitted = currentObject.author.name.split(' ')
+    const currentName = fullNameSplitted[0]
+    const currentLastname = fullNameSplitted[1]
+    const authorInitials = currentName[0] + currentLastname[0]
+    return authorInitials
+};
+
+const formatDate = (currentCreated) => {
+    splittedDate = currentCreated.split('-')
+    const formattedDate = splittedDate[2] + '-' + splittedDate[1] + '-' + splittedDate[0]
+    return formattedDate
+}
+
 const incrementLikes = (cuttentButton)=> {
     const likeCounterElement = document.getElementById(`like-counter-${cuttentButton.getAttribute( "data-postid")}`)
     cuttentButton.classList.add('like-button--liked')
     let currentLikes = posts[cuttentButton.getAttribute( "data-postid") - 1].likes
     currentLikes++
     likeCounterElement.innerHTML = currentLikes
-}
+};
 
 const appStart = () => {
     posts.forEach(currentPost => {
