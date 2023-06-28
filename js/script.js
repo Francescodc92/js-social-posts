@@ -188,20 +188,18 @@ const appStart = () => {
 
     likeButtons.forEach(button => {
         button.addEventListener('click', (e)=> {
-            e.preventDefault()
+            e.preventDefault();
             if(button.classList.contains('like-button--liked')){      
-              decrementLikes(button)
-              const id = posts[button.getAttribute( "data-postid")].id - 1
-              likedId.splice(likedId.indexOf(id), 1)
-              console.log(likedId)
+              decrementLikes(button);
+              const id = posts[button.getAttribute( "data-postid") - 1].id ;
+              likedId.splice(likedId.indexOf(id), 1);
             }else {
-                incrementLikes(button)
-                const id = posts[button.getAttribute( "data-postid")].id - 1
-                likedId.push(id)
-                console.log(likedId)
+                incrementLikes(button);
+                const id = posts[button.getAttribute( "data-postid") - 1].id; 
+                likedId.push(id);
             }
         })
-    })
+    });
 };
 
 
