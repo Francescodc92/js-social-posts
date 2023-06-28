@@ -1,13 +1,25 @@
 /*
 - MILESTONE 2 :
   - Prendendo come riferimento il layout di esempio presente nell'html, stampiamo i post del nostro feed
-
+                //-------------------------------/
 Ragionamento base milestone 2
 1. creare un ciclo che percorre l'intero array 
 2. prendere l'html statico 
     - inserirlo in una variabile 
     - sostituire le parti dinamiche con delle variabili 
     - inserire la variabile (che contiene l'html) nell'contenitore che lo conderrà
+                //-------------------------------/
+
+- MILESTONE 3 :
+  - Se clicchiamo sul tasto "Mi Piace" cambiamo il colore al testo del bottone e incrementiamo il counter dei likes relativo.
+  - Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
+
+Ragionamento base milestone 3
+1. aggiungere un event-listener a ogni pulsante like
+    - dato il button ha un data-postid="id" possiamo verificare il valore di questo attributo castom e prenderlo come indice dell'arrei (questo ritornerà l'oggetto intero )
+2. prendere il valore dei like dell'oggetto e incrementarlo  
+3. dopo di che inserisco nell'elemento specifico il nuovo valore 
+
 */
 
 const posts = [
@@ -70,20 +82,30 @@ const posts = [
 /*-------------
 global variables
 --------------*/
-const postsContainer = document.getElementById('container')
+const postsContainer = document.getElementById('container');
 /*-----------
 functions
 -----------*/
 const createHTML = (currentObject) => {
+    const fullNameSplitted = currentObject.author.name.split(' ')
+    const currentName = fullNameSplitted[0]
+    const currentLastname = fullNameSplitted[1]
+    const authorInitials = currentName[0] + currentLastname[0]
     const elementHtml =  `
         <div class="post">
             <div class="post__header">
                 <div class="post-meta">                    
                     <div class="post-meta__icon">
-                        <img class="profile-pic" 
-                        src="${currentObject.author.image}"
-                         alt="${currentObject.author.name}"
-                        >                    
+                        ${
+                            currentObject.author.image != undefined ? `
+                            <img class="profile-pic" 
+                            src="${currentObject.author.image}"
+                            alt="${currentObject.author.name}"
+                            > 
+                            ` 
+                            :
+                            authorInitials.toUpperCase()                
+                        }
                     </div>
                     <div class="post-meta__data">
                         <div class="post-meta__author">
@@ -119,11 +141,28 @@ const createHTML = (currentObject) => {
     return elementHtml;
 };
 
+const incrementLikes = (cuttentButton)=> {
+    const likeCounterElement = document.getElementById(`like-counter-${cuttentButton.getAttribute( "data-postid")}`)
+    cuttentButton.classList.add('like-button--liked')
+    let currentLikes = posts[cuttentButton.getAttribute( "data-postid") - 1].likes
+    currentLikes++
+    likeCounterElement.innerHTML = currentLikes
+}
+
 const appStart = () => {
     posts.forEach(currentPost => {
         const postHtml = createHTML(currentPost);
         postsContainer.innerHTML += postHtml;
     });
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', (e)=> {
+            e.preventDefault()
+            incrementLikes(button)
+        })
+    })
 };
+
 
 appStart();
