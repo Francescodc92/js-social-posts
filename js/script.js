@@ -71,47 +71,59 @@ const posts = [
 global variables
 --------------*/
 const postsContainer = document.getElementById('container')
-posts.forEach(currentPost => {
-    const postHtml = `
+/*-----------
+functions
+-----------*/
+const createHTML = (currentObject) => {
+    const elementHtml =  `
         <div class="post">
             <div class="post__header">
                 <div class="post-meta">                    
                     <div class="post-meta__icon">
                         <img class="profile-pic" 
-                        src="${currentPost.author.image}"
-                         alt="${currentPost.author.name}"
+                        src="${currentObject.author.image}"
+                         alt="${currentObject.author.name}"
                         >                    
                     </div>
                     <div class="post-meta__data">
                         <div class="post-meta__author">
-                        ${currentPost.author.name}
+                        ${currentObject.author.name}
                         </div>
                         <div class="post-meta__time">
-                        ${currentPost.created}
+                        ${currentObject.created}
                         </div>
                     </div>                    
                 </div>
             </div>
             <div class="post__text">
-                ${currentPost.content}
+                ${currentObject.content}
             </div>
             <div class="post__image">
-                <img src="https://unsplash.it/600/300?image=${currentPost.id}" alt="">
+                <img src="${currentObject.media}" alt="">
             </div>
             <div class="post__footer">
                 <div class="likes js-likes">
                     <div class="likes__cta">
-                        <a class="like-button  js-like-button" href="#" data-postid="${currentPost.id}">
+                        <a class="like-button  js-like-button" href="#" data-postid="${currentObject.id}">
                             <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                             <span class="like-button__label">Mi Piace</span>
                         </a>
                     </div>
                     <div class="likes__counter">
-                        Piace a <b id="like-counter-${currentPost.id}" class="js-likes-counter">${currentPost.likes}</b> persone
+                        Piace a <b id="like-counter-${currentObject.id}" class="js-likes-counter">${currentObject.likes}</b> persone
                     </div>
                 </div> 
             </div>            
         </div>
     `
-    postsContainer.innerHTML += postHtml
-})
+    return elementHtml;
+};
+
+const appStart = () => {
+    posts.forEach(currentPost => {
+        const postHtml = createHTML(currentPost);
+        postsContainer.innerHTML += postHtml;
+    });
+};
+
+appStart();
