@@ -92,6 +92,7 @@ const posts = [
 global variables
 --------------*/
 const postsContainer = document.getElementById('container');
+const likedId = []
 /*-----------
 functions
 -----------*/
@@ -162,12 +163,20 @@ const formatDate = (currentCreated) => {
     return formattedDate
 }
 
-const incrementLikes = (cuttentButton)=> {
-    const likeCounterElement = document.getElementById(`like-counter-${cuttentButton.getAttribute( "data-postid")}`)
-    cuttentButton.classList.add('like-button--liked')
-    let currentLikes = posts[cuttentButton.getAttribute( "data-postid") - 1].likes
-    currentLikes++
-    likeCounterElement.innerHTML = currentLikes
+const incrementLikes = (currentButton)=> {
+    const likeCounterElement = document.getElementById(`like-counter-${currentButton.getAttribute( "data-postid")}`)
+    currentButton.classList.add('like-button--liked')
+    posts[currentButton.getAttribute( "data-postid") - 1].likes
+    posts[currentButton.getAttribute( "data-postid") - 1].likes++
+    likeCounterElement.innerHTML = posts[currentButton.getAttribute( "data-postid") - 1].likes
+};
+
+const decrementLikes = (currentButton)=> {
+    const likeCounterElement = document.getElementById(`like-counter-${currentButton.getAttribute( "data-postid")}`)
+    currentButton.classList.remove('like-button--liked')
+    posts[currentButton.getAttribute( "data-postid") - 1].likes
+    posts[currentButton.getAttribute( "data-postid") - 1].likes--
+    likeCounterElement.innerHTML = posts[currentButton.getAttribute( "data-postid") - 1].likes
 };
 
 const appStart = () => {
@@ -180,7 +189,17 @@ const appStart = () => {
     likeButtons.forEach(button => {
         button.addEventListener('click', (e)=> {
             e.preventDefault()
-            incrementLikes(button)
+            if(button.classList.contains('like-button--liked')){      
+              decrementLikes(button)
+              const id = posts[button.getAttribute( "data-postid")].id - 1
+              likedId.splice(likedId.indexOf(id), 1)
+              console.log(likedId)
+            }else {
+                incrementLikes(button)
+                const id = posts[button.getAttribute( "data-postid")].id - 1
+                likedId.push(id)
+                console.log(likedId)
+            }
         })
     })
 };
