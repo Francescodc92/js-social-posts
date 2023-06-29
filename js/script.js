@@ -112,7 +112,12 @@ const createHTML = (currentObject) => {
                             > 
                             ` 
                             :
-                            authorInitials.toUpperCase()                
+
+                            `
+                                <span class="alternative-text">
+                                    ${authorInitials.toUpperCase()}
+                                <\span> 
+                            `              
                         }
                     </div>
                     <div class="post-meta__data">
